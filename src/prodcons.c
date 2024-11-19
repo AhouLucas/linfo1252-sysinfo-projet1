@@ -20,8 +20,6 @@ void* producer(void* arg) {
     int id = *((int*) arg);
     for (int i = 0; i < NUM_ITEMS; i++) {
 
-        printf("i = %d\n", i);
-
         sem_wait(&empty);           // Wait for an empty slot
         pthread_mutex_lock(&mutex); // Lock the buffer
 
