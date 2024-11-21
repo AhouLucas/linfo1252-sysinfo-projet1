@@ -57,8 +57,8 @@ int main(int argc, char **argv) {
     }
 
 
-    pthread_t threads[N-1];
-    params_t args[N-1];
+    pthread_t threads[N];
+    params_t args[N];
     int err;
     pthread_mutex_t* baguette = malloc(sizeof(pthread_mutex_t)*N);
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
     }
 
 
-    for (int i = 0; i < N-1; i++) {
+    for (int i = 0; i < N; i++) {
         args[i].N = N;
         args[i].id = i;
         args[i].baguette = baguette;
@@ -88,12 +88,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    // calls one philosophe in main
-    params_t param_main_philosophe = (params_t){.N=N-1, .id=N-1, .baguette=baguette};
-    philosophe((void*) &param_main_philosophe);
 
-
-    for(int i = 0; i < N-1; i++) {
+    for(int i = 0; i < N; i++) {
         
         // Join threads
         err=pthread_join(threads[i], NULL);
