@@ -105,9 +105,6 @@ int main(int argc, char **argv) {
         pthread_join(threads[i], NULL);
     }
 
-    printf("count_write = %d\n", count_write);
-    printf("count_read = %d\n", count_read);
-
     sem_destroy(&db);
     pthread_mutex_destroy(&mutex);
 
