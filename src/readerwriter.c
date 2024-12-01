@@ -13,8 +13,8 @@ sem_t db;   // Protects access to the database
 pthread_mutex_t mutex;  // Protects access to the readercount
 int readercount = 0;
 
-int count_write = 0;
-int count_read = 0;
+int count_write = 0; // Number of writes done so far
+int count_read = 0; // Number of reads done so far
 
 void writer(void) {
     while(true) {
