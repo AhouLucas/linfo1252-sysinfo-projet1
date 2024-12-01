@@ -3,22 +3,37 @@ SRC_DIR = src
 # Directory for the compiled executables
 BIN_DIR = bin
 
-# Find all .c files in SRC_DIR
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-# Generate executable names by replacing src/ with bin/ and .c with nothing
-EXES = $(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%,$(SRCS))
-
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -Iinclude
 
 # Default target: compile all executables
-all: $(EXES)
+all: $(BIN_DIR)/philosophe $(BIN_DIR)/prodcons $(BIN_DIR)/readerwriter $(BIN_DIR)/test_and_set_perf $(BIN_DIR)/test_and_test_and_set_perf
 
 # Rule to build each executable
-$(BIN_DIR)/%: $(SRC_DIR)/%.c
-	mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) $< -o $@
+$(BIN_DIR)/philosophe : $(SRC_DIR)/philosophe.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BIN_DIR)/prodcons : $(SRC_DIR)/prodcons.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BIN_DIR)/readerwriter : $(SRC_DIR)/readerwriter.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BIN_DIR)/test_and_set : $(SRC_DIR)/test_and_set.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $<
+
+$(BIN_DIR)/test_and_set_perf : $(SRC_DIR)/test_and_set_perf.c $(SRC_DIR)/test_and_set.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(BIN_DIR)/test_and_test_and_set_perf : $(SRC_DIR)/test_and_test_and_set_perf.c $(SRC_DIR)/test_and_test_and_set.c $(SRC_DIR)/test_and_set.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
 
 # Add individual targets for each source file
 # Dynamically create rules for individual source files
