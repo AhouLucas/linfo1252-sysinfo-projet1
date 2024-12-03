@@ -1,0 +1,25 @@
+#include "../include/sem_tas.h"
+
+void sem_tas_init(sem_tas_t* sem, int value) {
+    sem->value = value;
+    sem->mutex_tas = 0;
+}
+
+void sem_tas_wait(sem_tas_t* sem) {
+    lock_TAS(sem->mutex_tas);
+    sem->value--;
+    int tmp = sem->value;
+    unlock_TAS(sem->mutex_tas);
+
+    while (tmp <= 0) {
+        lock_TAS(sem->mutex_tas);
+        int tmp = sem->value;
+        unlock_TAS(sem->mutex_tas);
+    }
+}
+
+void sem_tas_post(sem_tas_t* sem) {
+    lock_TAS(sem->mutex_tas);
+    sem->value++;
+    unlock_TAS(sem->mutex_tas);
+}
