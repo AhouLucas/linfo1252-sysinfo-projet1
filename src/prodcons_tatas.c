@@ -2,8 +2,8 @@
 #include "stdlib.h"
 #include "stdbool.h"
 #include "pthread.h"
-#include "../include/test_and_set.h"
-#include "../include/sem_tas.h"
+#include "../include/test_and_test_and_set.h"
+#include "../include/sem_tatas.h"
 #include "unistd.h"
 #include "getopt.h"
 
@@ -16,50 +16,50 @@ int out = 0;  // Index for consumer
 int count_produced = 0;
 int count_consumed = 0;
 
-sem_tas_t empty;  // Tracks empty slots in the buffer
-sem_tas_t full;   // Tracks filled slots in the buffer
+sem_tatas_t empty;  // Tracks empty slots in the buffer
+sem_tatas_t full;   // Tracks filled slots in the buffer
 Mutex_t mutex;  // Protects access to the buffer
 
 void producer(void* arg) {
     int id = *((int*) arg);
     while(true) {
-        sem_tas_wait(&empty); // attente d'une place libre
-        lock_TAS(&mutex);
+        sem_tatas_wait(&empty); // attente d'une place libre
+        lock_TATAS(&mutex);
 
         // section critique
         if (count_produced >= NUM_ITEMS) {
-            unlock_TAS(&mutex);
-            sem_tas_post(&full);
+            unlock_TATAS(&mutex);
+            sem_tatas_post(&full);
             break;
         }
         buffer[in] = id;
         count_produced++;
         in = (in + 1) % BUFFER_SIZE;
 
-        unlock_TAS(&mutex);
+        unlock_TATAS(&mutex);
         for (int i=0; i<10000; i++); // Simulate a slow producer
-        sem_tas_post(&full); // il y a une place remplie en plus
+        sem_tatas_post(&full); // il y a une place remplie en plus
     }
 }
 
 void consumer(void) {
     while(true) {
-        sem_tas_wait(&full); // attente d'une place remplie
-        lock_TAS(&mutex);
+        sem_tatas_wait(&full); // attente d'une place remplie
+        lock_TATAS(&mutex);
 
         // section critique
         if (count_consumed >= NUM_ITEMS) {
-            unlock_TAS(&mutex);
-            sem_tas_post(&empty);
+            unlock_TATAS(&mutex);
+            sem_tatas_post(&empty);
             break;
         }
         // printf("%d\n", buffer[out]);
         count_consumed++;
         out = (out + 1) % BUFFER_SIZE;
         
-        unlock_TAS(&mutex);
+        unlock_TATAS(&mutex);
         for (int i=0; i<10000; i++); // Simulate a slow producer
-        sem_tas_post(&empty); // il y a une place libre en plus
+        sem_tatas_post(&empty); // il y a une place libre en plus
     }
 }
 
@@ -82,8 +82,8 @@ int main(int argc, char** argv) {
         }
     }
 
-    sem_tas_init(&empty, BUFFER_SIZE);  // buffer vide
-    sem_tas_init(&full, 0);   // buffer vide
+    sem_tatas_init(&empty, BUFFER_SIZE);  // buffer vide
+    sem_tatas_init(&full, 0);   // buffer vide
     mutex = 0;
 
     pthread_t prod[N_prod];

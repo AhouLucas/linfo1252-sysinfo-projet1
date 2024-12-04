@@ -3,7 +3,7 @@
 #include "unistd.h"
 #include "getopt.h"
 #include "pthread.h"
-#include "../include/test_and_set.h"
+#include "../include/test_and_test_and_set.h"
 
 #define NUM_CYCLES 1000000
 
@@ -26,17 +26,17 @@ void* philosophe(void* arg) {
 
     for (int i = 0; i < NUM_CYCLES; i++) {
         if(left<right) {
-            lock_TAS(&baguette[left]);
-            lock_TAS(&baguette[right]);
+            lock_TATAS(&baguette[left]);
+            lock_TATAS(&baguette[right]);
 
         }
         else {
-            lock_TAS(&baguette[right]);
-            lock_TAS(&baguette[left]);
+            lock_TATAS(&baguette[right]);
+            lock_TATAS(&baguette[left]);
         }
 
-        unlock_TAS(&baguette[left]);
-        unlock_TAS(&baguette[right]);
+        unlock_TATAS(&baguette[left]);
+        unlock_TATAS(&baguette[right]);
     }
 
     return NULL;
