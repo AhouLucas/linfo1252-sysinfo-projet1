@@ -4,6 +4,14 @@ import pandas as pd
 
 
 
+local_csv = True
+
+if local_csv:
+    csv_dir = "local_csv/"
+else:
+    csv_dir = "csv/"
+
+
 def plot(plots: list[tuple], num_threads, title, export=False, filename=None, export_type='png', show=True):
     y_max = 0
     for data, label in plots:
@@ -21,6 +29,9 @@ def plot(plots: list[tuple], num_threads, title, export=False, filename=None, ex
     plt.grid(linestyle='--', alpha=0.5)
 
     if export:
+        if local_csv:
+            filename += "_local"
+            
         plt.savefig("graphs/" + filename + "." + export_type, format=export_type, bbox_inches='tight')
 
     if show:
@@ -29,17 +40,17 @@ def plot(plots: list[tuple], num_threads, title, export=False, filename=None, ex
 
 num_threads = np.array([2, 4, 8, 16, 32])
 
-data_philosophe = pd.read_csv('csv/philosophe.csv', header=0)
-data_philosophe_tas = pd.read_csv('csv/philosophe_tas.csv', header=0)
-data_philosophe_tatas = pd.read_csv('csv/philosophe_tatas.csv', header=0)
+data_philosophe = pd.read_csv(csv_dir + 'philosophe.csv', header=0)
+data_philosophe_tas = pd.read_csv(csv_dir + 'philosophe_tas.csv', header=0)
+data_philosophe_tatas = pd.read_csv(csv_dir + 'philosophe_tatas.csv', header=0)
 
-data_prodcons = pd.read_csv('csv/prodcons.csv', header=0)
-data_prodcons_tas = pd.read_csv('csv/prodcons_tas.csv', header=0)
-data_prodcons_tatas = pd.read_csv('csv/prodcons_tatas.csv', header=0)
+data_prodcons = pd.read_csv(csv_dir + 'prodcons.csv', header=0)
+data_prodcons_tas = pd.read_csv(csv_dir + 'prodcons_tas.csv', header=0)
+data_prodcons_tatas = pd.read_csv(csv_dir + 'prodcons_tatas.csv', header=0)
 
-data_readerwriter = pd.read_csv('csv/readerwriter.csv', header=0)
-data_readerwriter_tas = pd.read_csv('csv/readerwriter_tas.csv', header=0)
-data_readerwriter_tatas = pd.read_csv('csv/readerwriter_tatas.csv', header=0)
+data_readerwriter = pd.read_csv(csv_dir + 'readerwriter.csv', header=0)
+data_readerwriter_tas = pd.read_csv(csv_dir + 'readerwriter_tas.csv', header=0)
+data_readerwriter_tatas = pd.read_csv(csv_dir + 'readerwriter_tatas.csv', header=0)
 
 # Philosophe
 plot([(data_philosophe, "philosophe"), (data_philosophe_tas, "philosophe TAS"), (data_philosophe_tatas, "philosophe TATAS")], 
@@ -57,8 +68,8 @@ plot([(data_readerwriter, "reader/writer"), (data_readerwriter_tas, "reader/writ
 ## TAS & TATAS Performance
 num_threads = np.array([1, 2, 4, 8, 16, 32])
 
-data_tas = pd.read_csv('csv/test_and_set_perf.csv', header=0)
-data_tatas = pd.read_csv('csv/test_and_test_and_set_perf.csv', header=0)
+data_tas = pd.read_csv(csv_dir + 'test_and_set_perf.csv', header=0)
+data_tatas = pd.read_csv(csv_dir + 'test_and_test_and_set_perf.csv', header=0)
 
 plot([(data_tas, "test & set"), (data_tatas, "test & test & set")], 
      num_threads, "TAS Vs. TATAS", export=True, filename="tas_and_tatas", show=True)

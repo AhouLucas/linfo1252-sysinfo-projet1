@@ -5,7 +5,7 @@ BIN_DIR = .
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -Iinclude
+CFLAGS = -Wall -Wextra -Werror -g -Iinclude -lpthread
 
 # Default target: compile all executables
 all: $(BIN_DIR)/philosophe $(BIN_DIR)/philosophe_tas $(BIN_DIR)/philosophe_tatas $(BIN_DIR)/prodcons $(BIN_DIR)/prodcons_tas $(BIN_DIR)/prodcons_tatas $(BIN_DIR)/readerwriter $(BIN_DIR)/readerwriter_tas $(BIN_DIR)/readerwriter_tatas $(BIN_DIR)/test_and_set_perf $(BIN_DIR)/test_and_test_and_set_perf
