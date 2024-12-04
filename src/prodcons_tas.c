@@ -119,5 +119,8 @@ int main(int argc, char** argv) {
         pthread_join(cons[i], NULL);
     }
 
+    sem_tas_destroy(&empty);
+    sem_tas_destroy(&full);
+
     return 0;
 }

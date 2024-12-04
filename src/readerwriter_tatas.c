@@ -2,7 +2,7 @@
 #include "stdlib.h"
 #include "stdbool.h"
 #include "pthread.h"
-#include "../include/sem_tas.h"
+#include "../include/sem_tatas.h"
 #include "../include/test_and_set.h"
 #include "unistd.h"
 #include "getopt.h"
@@ -10,7 +10,7 @@
 #define NUM_WRITE 640
 #define NUM_READ 2540
 
-sem_tas_t db;   // Protects access to the database
+sem_tatas_t db;   // Protects access to the database
 Mutex_t mutex;  // Protects access to the readercount
 int readercount = 0;
 
@@ -19,43 +19,43 @@ int count_read = 0; // Number of reads done so far
 
 void writer(void) {
     while(true) {
-        sem_tas_wait(&db);
+        sem_tatas_wait(&db);
         // section critique
         if (count_write >= NUM_WRITE) {
-            sem_tas_post(&db);
+            sem_tatas_post(&db);
             break;
         }
         count_write++;
 
         for (int i=0; i<10000; i++); // Simulate a slow writer
-        sem_tas_post(&db);
+        sem_tatas_post(&db);
     }
 }
 
 void reader(void) {
     while(true) {
-        lock_TAS(&mutex);
+        lock_TATAS(&mutex);
         if (count_read >= NUM_READ) {
-            unlock_TAS(&mutex);
+            unlock_TATAS(&mutex);
             break;
         }
         count_read++;
 
         readercount++;
         if (readercount == 1) {
-            sem_tas_wait(&db);
+            sem_tatas_wait(&db);
         }
 
         for (int i=0; i<10000; i++); // Simulate a slow reader
-        unlock_TAS(&mutex);
+        unlock_TATAS(&mutex);
 
 
-        lock_TAS(&mutex);
+        lock_TATAS(&mutex);
         readercount--;
         if (readercount == 0) {
-            sem_tas_post(&db);
+            sem_tatas_post(&db);
         }
-        unlock_TAS(&mutex);
+        unlock_TATAS(&mutex);
     }
 }
 
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
     pthread_t threads[n_writer+n_reader];
     int err;
 
-    sem_tas_init(&db, 1);
+    sem_tatas_init(&db, 1);
     mutex = 0;
 
     for (int i = 0; i < n_writer; i++) {
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
         pthread_join(threads[i], NULL);
     }
 
-    sem_tas_destroy(&db);
+    sem_tatas_destroy(&db);
 
     return 0;
 }

@@ -3,76 +3,62 @@ import numpy as np
 import pandas as pd
 
 
-num_threads = np.array([2, 4, 8, 16, 32])
 
-data_philosophe = pd.read_csv('csv/philosophe.csv', header=0)
-data_prodcons = pd.read_csv('csv/prodcons.csv', header=0)
-data_readerwriter = pd.read_csv('csv/readerwriter.csv', header=0)
+def plot(plots: list[tuple], num_threads, title, export=False, filename=None, export_type='png', show=True):
+    y_max = 0
+    for data, label in plots:
+        line, = plt.plot(num_threads, data.mean(), label="Mean " + label)
+        plt.errorbar(num_threads, data.mean(), yerr=data.std(), fmt='.', color=line.get_color())
+        if data.mean().max() >= y_max: y_max = data.mean().max()
 
-mean_philosophe = data_philosophe.mean()
-mean_prodcons = data_prodcons.mean()
-mean_readerwriter = data_readerwriter.mean()
-
-std_philosophe = data_philosophe.std()
-std_prodcons = data_prodcons.std()
-std_readerwriter = data_readerwriter.std()
-
-
-def plot(data, num_threads, title, export=False, filename=None, export_type='png', show=True):
-    plt.plot(num_threads, data.mean(), marker='.', label="Mean " + title)
-    plt.plot(num_threads, data.std(), marker='.', label="Std " + title)
     plt.xticks(num_threads)
     plt.xlabel('Number of threads')
     plt.ylabel('Time (s)')
     plt.xlim(0, num_threads.max() + 1)
-    plt.ylim(0, data.max().max() + 0.2)
+    plt.ylim(0, y_max + 0.2*y_max)
     plt.title(title)
     plt.legend()
     plt.grid(linestyle='--', alpha=0.5)
 
     if export:
-        plt.savefig(filename, format=export_type, bbox_inches='tight')
+        plt.savefig("graphs/" + filename + "." + export_type, format=export_type, bbox_inches='tight')
 
     if show:
         plt.show()
 
 
+num_threads = np.array([2, 4, 8, 16, 32])
+
+data_philosophe = pd.read_csv('csv/philosophe.csv', header=0)
+data_philosophe_tas = pd.read_csv('csv/philosophe_tas.csv', header=0)
+data_philosophe_tatas = pd.read_csv('csv/philosophe_tatas.csv', header=0)
+
+data_prodcons = pd.read_csv('csv/prodcons.csv', header=0)
+data_prodcons_tas = pd.read_csv('csv/prodcons_tas.csv', header=0)
+data_prodcons_tatas = pd.read_csv('csv/prodcons_tatas.csv', header=0)
+
+data_readerwriter = pd.read_csv('csv/readerwriter.csv', header=0)
+data_readerwriter_tas = pd.read_csv('csv/readerwriter_tas.csv', header=0)
+data_readerwriter_tatas = pd.read_csv('csv/readerwriter_tatas.csv', header=0)
+
 # Philosophe
-plot(data_philosophe, num_threads, "Philosophe")
+plot([(data_philosophe, "philosophe"), (data_philosophe_tas, "philosophe TAS"), (data_philosophe_tatas, "philosophe TATAS")], 
+     num_threads, "Philosophe", export=True, filename="philosophe", show=True)
 
 # ProdCons
-plot(data_prodcons, num_threads, "ProdCons")
+plot([(data_prodcons, "prod./cons."), (data_prodcons_tas, "prod./cons. TAS"), (data_prodcons_tatas, "prod./cons. TATAS")], 
+     num_threads, "Producer / Consumer", export=True, filename="prodcons", show=True)
 
 # ReaderWriter
-plot(data_readerwriter, num_threads, "ReaderWriter")
+plot([(data_readerwriter, "reader/writer"), (data_readerwriter_tas, "reader/writer TAS"), (data_readerwriter_tatas, "reader/writer TATAS")], 
+     num_threads, "Reader / Writer", export=True, filename="readerwriter", show=True)
 
 
-# Second part
+## TAS & TATAS Performance
+num_threads = np.array([1, 2, 4, 8, 16, 32])
 
 data_tas = pd.read_csv('csv/test_and_set_perf.csv', header=0)
 data_tatas = pd.read_csv('csv/test_and_test_and_set_perf.csv', header=0)
 
-mean_tas = data_tas.mean()
-mean_tatas = data_tatas.mean()
-
-std_tas = data_tas.std()
-std_tatas = data_tatas.std()
-
-num_threads = np.array([1, 2, 4, 8, 16, 32])
-
-# Test and Set vs. Test and Test and Set
-plt.plot(num_threads, mean_tas, marker='.', label="Mean test_and_set")
-plt.plot(num_threads, std_tas, marker='.', label="Std test_and_set")
-
-plt.plot(num_threads, mean_tatas, marker='.', label="Mean test_and_test_and_set")
-plt.plot(num_threads, std_tatas, marker='.', label="Std test_and_test_and_set")
-
-plt.xticks(num_threads)
-plt.xlabel('Number of threads')
-plt.ylabel('Time (s)')
-plt.xlim(0, num_threads.max() + 1)
-plt.ylim(0, max(data_tas.max().max(), data_tatas.max().max()) + 0.2)
-plt.title("Test and Set Vs. Test and Test and Set")
-plt.legend()
-plt.grid(linestyle='--', alpha=0.5)
-plt.show()
+plot([(data_tas, "test & set"), (data_tatas, "test & test & set")], 
+     num_threads, "TAS Vs. TATAS", export=True, filename="tas_and_tatas", show=True)

@@ -8,7 +8,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g -Iinclude
 
 # Default target: compile all executables
-all: $(BIN_DIR)/philosophe $(BIN_DIR)/philosophe_tas $(BIN_DIR)/philosophe_tatas $(BIN_DIR)/prodcons $(BIN_DIR)/prodcons_tas $(BIN_DIR)/prodcons_tatas $(BIN_DIR)/readerwriter  $(BIN_DIR)/test_and_set_perf $(BIN_DIR)/test_and_test_and_set_perf
+all: $(BIN_DIR)/philosophe $(BIN_DIR)/philosophe_tas $(BIN_DIR)/philosophe_tatas $(BIN_DIR)/prodcons $(BIN_DIR)/prodcons_tas $(BIN_DIR)/prodcons_tatas $(BIN_DIR)/readerwriter $(BIN_DIR)/readerwriter_tas $(BIN_DIR)/readerwriter_tatas $(BIN_DIR)/test_and_set_perf $(BIN_DIR)/test_and_test_and_set_perf
 
 # Rule to build each executable
 
@@ -45,7 +45,13 @@ $(BIN_DIR)/readerwriter : $(SRC_DIR)/readerwriter.c
 	@mkdir -p $(BIN_DIR)
 	$(CC) $(CFLAGS) -o $@ $<
 
+$(BIN_DIR)/readerwriter_tas : $(SRC_DIR)/readerwriter_tas.c $(SRC_DIR)/sem_tas.c $(SRC_DIR)/test_and_set.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
 
+$(BIN_DIR)/readerwriter_tatas : $(SRC_DIR)/readerwriter_tatas.c $(SRC_DIR)/sem_tatas.c $(SRC_DIR)/test_and_set.c $(SRC_DIR)/test_and_test_and_set.c
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) -o $@ $^
 
 
 $(BIN_DIR)/test_and_set_perf : $(SRC_DIR)/test_and_set_perf.c $(SRC_DIR)/test_and_set.c
