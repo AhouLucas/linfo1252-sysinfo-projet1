@@ -13,7 +13,6 @@ make clean  # Clean bin/ directory
 ## Structure
 ```
 linfo1252-sysinfo-projet1/
-├── bin/                # Directory for compiled binaries
 ├── csv/                # Directory for CSV output files
 ├── src/                # Directory for source files
 │   ├── philosophe.c    # Source file for the philosopher problem

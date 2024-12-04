@@ -1,7 +1,7 @@
 # Directory containing source files
 SRC_DIR = src
 # Directory for the compiled executables
-BIN_DIR = bin
+BIN_DIR = .
 
 # Compiler and flags
 CC = gcc
@@ -70,7 +70,7 @@ $(basename $(notdir $(SRCS))): %: $(BIN_DIR)/%
 
 # Clean up compiled files
 clean:
-	rm -rf $(BIN_DIR)
+	rm -f $(BIN_DIR)/philosophe $(BIN_DIR)/philosophe_tas $(BIN_DIR)/philosophe_tatas $(BIN_DIR)/prodcons $(BIN_DIR)/prodcons_tas $(BIN_DIR)/prodcons_tatas $(BIN_DIR)/readerwriter $(BIN_DIR)/readerwriter_tas $(BIN_DIR)/readerwriter_tatas $(BIN_DIR)/test_and_set_perf $(BIN_DIR)/test_and_test_and_set_perf
 
 # Phony targets
 .PHONY: all clean
