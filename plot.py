@@ -54,15 +54,15 @@ data_readerwriter_tatas = pd.read_csv(csv_dir + 'readerwriter_tatas.csv', header
 
 # Philosophe
 plot([(data_philosophe, "philosophe"), (data_philosophe_tas, "philosophe TAS"), (data_philosophe_tatas, "philosophe TATAS")], 
-     num_threads, "Philosophe", export=True, filename="philosophe", show=True)
+     num_threads, "Philosophe", export=True, filename="philosophe", show=True, export_type='svg')
 
 # ProdCons
 plot([(data_prodcons, "prod./cons."), (data_prodcons_tas, "prod./cons. TAS"), (data_prodcons_tatas, "prod./cons. TATAS")], 
-     num_threads, "Producer / Consumer", export=True, filename="prodcons", show=True)
+     num_threads, "Producer / Consumer", export=True, filename="prodcons", show=True, export_type='svg')
 
 # ReaderWriter
 plot([(data_readerwriter, "reader/writer"), (data_readerwriter_tas, "reader/writer TAS"), (data_readerwriter_tatas, "reader/writer TATAS")], 
-     num_threads, "Reader / Writer", export=True, filename="readerwriter", show=True)
+     num_threads, "Reader / Writer", export=True, filename="readerwriter", show=True, export_type='svg')
 
 
 ## TAS & TATAS Performance
@@ -72,4 +72,4 @@ data_tas = pd.read_csv(csv_dir + 'test_and_set_perf.csv', header=0)
 data_tatas = pd.read_csv(csv_dir + 'test_and_test_and_set_perf.csv', header=0)
 
 plot([(data_tas, "test & set"), (data_tatas, "test & test & set")], 
-     num_threads, "TAS Vs. TATAS", export=True, filename="tas_and_tatas", show=True)
+     num_threads, "TAS Vs. TATAS", export=True, filename="tas_and_tatas", show=True, export_type='svg')

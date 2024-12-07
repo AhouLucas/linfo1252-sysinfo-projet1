@@ -1,7 +1,5 @@
 #include "../include/test_and_set.h"
 
-typedef int Mutex_t;
-
 int test_and_set(Mutex_t *mutex) {
     int new_value = 1;
 
