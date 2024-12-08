@@ -6,6 +6,16 @@ void lock_TATAS(Mutex_t *mutex) {
     } while (test_and_set(mutex) == 1);
 }
 
+
 void unlock_TATAS(Mutex_t *mutex) {
-    *mutex = 0;
+    int new_value = 0;
+
+    // %0 = new_value
+    // %1 = *mutex
+    asm volatile (
+        "xchg %0, %1"
+        : "=r" (new_value), "=m" (*mutex)
+        : "0" (new_value), "m" (*mutex)
+        : "memory"
+    );
 }
