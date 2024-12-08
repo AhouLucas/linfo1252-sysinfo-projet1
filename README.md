@@ -1,5 +1,13 @@
 # linfo1252-sysinfo-projet1
-LINFO1252 Systèmes Informatiques - Projet 1
+LINFO1252 Systèmes Informatiques - Projet 1\
+Group members:
+- Lucas Ahou
+- Lucien Fiorini
+
+## Description
+Performance evaluation of pthread mutexes and implementation of synchronisation primitives using
+_test and set_ and _test and test and set_ algorithms and semaphores based on those primitives.
+
 
 
 ## Build
